@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= proj %> Report</title>
+    <style>
+        td {
+            padding: 7px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Summary for <%= proj %></h1>
+    <p>This table only includes tasks not marked as billed on <a href="https://clockify.me">Clockify</a>.</p>
+    <p>Report generated at <%= "#{Time.now.strftime('%T on %b %d %Y')}" %></p>
+    <p><a href='#bill_sum'>Jump to billing summary.</a></p>
+    <h2>Task Summary</h2>
+    <% all_tally = [0, 0] %>
+    <% weeks.each do |week, users| %>
+        <% week_start = Date.commercial(2021, week, 1) %>
+        <% week_end = Date.commercial(2021, week, 7) %>
+        <h3><%= "Week #{week} (#{week_start.strftime("%B %d")} - #{week_end.strftime("%B %d")})" %></h3>
+        <% users.each do |person, days| %>
+            <p><strong><%= person %></strong></p>
+            <table>
+            <tr>
+                <td>Day</td>
+                <td>Duration</td>
+                <td>Entries</td>
+                <td>Full Days</td>
+                <td>Half Days</td>
+            </tr>
+            <% tally = [0, 0] %>
+            <% days.each do |day, hour_array| %>
+                <% total_hours = hour_array.reduce(0, :+).round(2) %>
+                <% tasks = hour_array.count %>
+                <% bill_days = total_hours / 8 %>
+                <% bill_days = ((bill_days * 2.0).ceil) / 2.0 %>
+                <% if bill_days > 1 %>
+                <%     output = [1, 1] %>
+                <% elsif bill_days == 1 %>
+                <%     output = [1, 0] %>
+                <% else %>
+                <%     output = [0, 1] %>
+                <% end %>
+                <tr>
+                    <td><%= "#{day.strftime('%b %d')}" %></td>
+                    <td><%= total_hours %></td>
+                    <td><%= tasks %></td>
+                    <td><%= output[0] %></td>
+                    <td><%= output[1] %></td>
+                </tr>
+                <% tally[0] += output[0] %>
+                <% tally[1] += output[1] %>
+            <% end %>
+            <tr><td colspan=2><%= "Billing: #{tally[0]} full, #{tally[1]} half" %></td></tr>
+            <% all_tally[0] += tally[0] %>
+            <% all_tally[1] += tally[1] %>
+            </table><br>
+        <% end %>
+    <% end %>
+    <h2 id='bill_sum'>Project billing status</h2>
+    <p>Unbilled days summary: <%= "#{all_tally[0]} full, #{all_tally[1]} half." %></p>
+    <p>Unbilled days as full: <%= "#{(all_tally[0] + all_tally[1]/2.0).round(1)} full days."%>
+    <p>Previously billed days: <%= "#{prev_billed_days}" %>
+    <% if days_billed.positive? %>
+        <p>Days already invoiced for project: <%= "#{days_billed} full days." %></p>
+        <p>Days invoiced available to cover outstanding unbilled days: <%= "#{(days_billed.to_f - prev_billed_days).round(1)}"%>
+        <p>Days outstanding for project: <%= "#{((all_tally[0] + (all_tally[1]/2.0).round(1)) - (days_billed.to_f - prev_billed_days)).round(1)}" %>
+    <% end %>
+</body>
+</html>
