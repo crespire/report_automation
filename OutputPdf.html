@@ -61,7 +61,7 @@
 <div id="parent-class-section" class="nav-section">
   <h3>Parent</h3>
 
-  <p class="link">Object
+  <p class="link"><a href="Object.html">Object</a>
 </div>
 
     
@@ -81,10 +81,10 @@
 
   <ul class="link-list" role="directory">
     <li ><a href="#method-c-new">::new</a>
-    <li ><a href="#method-i-change_client">#change_client</a>
     <li ><a href="#method-i-change_year">#change_year</a>
     <li ><a href="#method-i-get_report">#get_report</a>
     <li ><a href="#method-i-output">#output</a>
+    <li ><a href="#method-i-set_client">#set_client</a>
   </ul>
 </div>
 
@@ -116,7 +116,7 @@
       <div id="method-c-new" class="method-detail ">
         <div class="method-heading">
           <span class="method-name">new</span><span
-            class="method-args">()</span>
+            class="method-args">(api)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
 
@@ -124,8 +124,8 @@
           <p>Initalize all instance variables</p>
 
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File pdf.rb, line 18</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>
+            <pre><span class="ruby-comment"># File lib/pdf.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">api</span>)
   <span class="ruby-ivar">@projects</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hash</span>, <span class="ruby-identifier">key</span><span class="ruby-operator">|</span> 
     <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">projects</span>, <span class="ruby-identifier">week</span><span class="ruby-operator">|</span>
       <span class="ruby-identifier">projects</span>[<span class="ruby-identifier">week</span>] = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">week</span>, <span class="ruby-identifier">user</span><span class="ruby-operator">|</span>
@@ -138,7 +138,8 @@
   <span class="ruby-ivar">@billed_tasks</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hash</span>, <span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">key</span>] = [] }
   <span class="ruby-ivar">@end_date</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>
   <span class="ruby-ivar">@year_changed</span> = <span class="ruby-keyword">false</span>
-  <span class="ruby-ivar">@client</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-string">&#39;.defaultclient&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">readline</span> }
+  <span class="ruby-ivar">@client</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@api</span> = <span class="ruby-identifier">api</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
@@ -153,36 +154,6 @@
          <h3>Public Instance Methods</h3>
        </header>
 
-      <div id="method-i-change_client" class="method-detail ">
-        <div class="method-heading">
-          <span class="method-name">change_client</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-
-        <div class="method-description">
-          <p>Set non-default client</p>
-
-          <div class="method-source-code" id="change_client-source">
-            <pre><span class="ruby-comment"># File pdf.rb, line 46</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">change_client</span>
-  <span class="ruby-identifier">client_list</span> = <span class="ruby-ivar">@api</span>.<span class="ruby-identifier">get_client_list</span>
-  <span class="ruby-identifier">selected_client</span> = <span class="ruby-keyword">nil</span>
-  <span class="ruby-identifier">names</span> = <span class="ruby-identifier">client_list</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">client</span><span class="ruby-operator">|</span> <span class="ruby-identifier">client</span>[<span class="ruby-string">&#39;name&#39;</span>] }
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&#39;Clients available:&#39;</span>
-  <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">client</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-identifier">client</span> }
-  <span class="ruby-keyword">until</span> <span class="ruby-identifier">names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">selected_client</span>)
-    <span class="ruby-identifier">print</span> <span class="ruby-string">&#39;Which client shall we query? &#39;</span>
-    <span class="ruby-identifier">selected_client</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>
-  <span class="ruby-keyword">end</span>
-  <span class="ruby-ivar">@client</span> = <span class="ruby-identifier">selected_client</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-        </div>
-
-
-      </div>
-
       <div id="method-i-change_year" class="method-detail ">
         <div class="method-heading">
           <span class="method-name">change_year</span><span
@@ -194,7 +165,7 @@
           <p>Sets the end_date to Dec 31 of the year specified.</p>
 
           <div class="method-source-code" id="change_year-source">
-            <pre><span class="ruby-comment"># File pdf.rb, line 37</span>
+            <pre><span class="ruby-comment"># File lib/pdf.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">change_year</span>
   <span class="ruby-identifier">print</span> <span class="ruby-string">&#39;What year would you like to retrieve? &#39;</span>
   <span class="ruby-identifier">input</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>
@@ -218,12 +189,11 @@
           <p>Queries API for data If the year has not changed, the report is only pulled to the last Sunday. If the year has changed, the last day is set to December 31 of the specified year.</p>
 
           <div class="method-source-code" id="get_report-source">
-            <pre><span class="ruby-comment"># File pdf.rb, line 63</span>
+            <pre><span class="ruby-comment"># File lib/pdf.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_report</span>
-  <span class="ruby-identifier">api</span> = <span class="ruby-constant">Clockify</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">last_day</span> = <span class="ruby-ivar">@year_changed</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@end_date</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Days</span>.<span class="ruby-identifier">prior_weekday</span>(<span class="ruby-ivar">@end_date</span>, <span class="ruby-string">&#39;Sunday&#39;</span>)
   <span class="ruby-identifier">year_start</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">ordinal</span>(<span class="ruby-identifier">last_day</span>.<span class="ruby-identifier">year</span>, <span class="ruby-value">1</span>)
-  <span class="ruby-identifier">json</span> = <span class="ruby-identifier">api</span>.<span class="ruby-identifier">detailed_report</span>(<span class="ruby-ivar">@client</span>, <span class="ruby-identifier">year_start</span>, <span class="ruby-identifier">last_day</span>)
+  <span class="ruby-identifier">json</span> = <span class="ruby-ivar">@api</span>.<span class="ruby-identifier">detailed_report</span>(<span class="ruby-identifier">year_start</span>, <span class="ruby-identifier">last_day</span>)
 
   <span class="ruby-identifier">abort</span>(<span class="ruby-node">&quot;JSON: #{json[&#39;code&#39;]} &gt; #{json[&#39;message&#39;]}&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">json</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-string">&#39;code&#39;</span>)
 
@@ -251,7 +221,7 @@
       <div id="method-i-output" class="method-detail ">
         <div class="method-heading">
           <span class="method-name">output</span><span
-            class="method-args">()</span>
+            class="method-args">(base_dir)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
 
@@ -259,14 +229,14 @@
           <p>Outputs PDF to spec</p>
 
           <div class="method-source-code" id="output-source">
-            <pre><span class="ruby-comment"># File pdf.rb, line 90</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">output</span>
+            <pre><span class="ruby-comment"># File lib/pdf.rb, line 80</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">output</span>(<span class="ruby-identifier">base_dir</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@projects</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">positive?</span>
-    <span class="ruby-identifier">report_template</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-string">&#39;report_template.erb&#39;</span>)
+    <span class="ruby-identifier">report_template</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-node">&quot;#{__dir__}/report_template.erb&quot;</span>)
     <span class="ruby-identifier">erb</span> = <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">report_template</span>, <span class="ruby-value">trim_mode:</span> <span class="ruby-string">&#39;&lt;&gt;&#39;</span>)
 
     <span class="ruby-identifier">date</span> = <span class="ruby-constant">Days</span>.<span class="ruby-identifier">prior_weekday</span>(<span class="ruby-ivar">@end_date</span>, <span class="ruby-string">&#39;Friday&#39;</span>)
-    <span class="ruby-identifier">output_dir</span> = <span class="ruby-node">&quot;/media/sf_vm-shared/reports/#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime(&quot;%Y%b%d&quot;)}&quot;</span>
+    <span class="ruby-identifier">output_dir</span> = <span class="ruby-node">&quot;#{base_dir}/#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime(&quot;%Y%b%d&quot;)}&quot;</span>
     <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Output dir: #{output_dir}&quot;</span>
     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-identifier">output_dir</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">output_dir</span>)
     <span class="ruby-identifier">puts</span> <span class="ruby-string">&#39;-&#39;</span> <span class="ruby-operator">*</span> <span class="ruby-value">80</span>
@@ -296,6 +266,27 @@
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-set_client" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">set_client</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Set client via API</p>
+
+          <div class="method-source-code" id="set_client-source">
+            <pre><span class="ruby-comment"># File lib/pdf.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_client</span>
+  <span class="ruby-ivar">@client</span> = <span class="ruby-ivar">@api</span>.<span class="ruby-identifier">set_client</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
