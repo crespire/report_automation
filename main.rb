@@ -7,9 +7,14 @@ require_relative 'lib/pdf'
 require_relative 'lib/xlsx'
 require_relative 'lib/clockify'
 
+##
+# Config variables from config.yml
+# +output+ defines the base output directory for the script
+# +workspace+ defines the workspace for the Clockify API
 CONFIG = YAML.load_file('config.yml')
 
-BASE_OUTPUT_DIR = CONFIG['output']
+##
+# Clockify API instance
 CLOCKIFY_API = Clockify.new
 
 continue = true
@@ -28,7 +33,7 @@ while continue
 
   abort('Exiting...') if input == 'x'
 
-  puts "The base output directory is currently set to: #{BASE_OUTPUT_DIR}"
+  puts "The base output directory is currently set to: #{CONFIG['output']}"
   print 'Change output directory? (y/n) '
   change_dir = gets.chomp
 
@@ -38,7 +43,7 @@ while continue
     output_dir = gets.chomp
   end
 
-  path = output_dir || BASE_OUTPUT_DIR
+  path = output_dir || CONFIG['output']
 
   if input == 'p'
     file = OutputPdf.new(CLOCKIFY_API)
