@@ -190,8 +190,10 @@
         <div class="method-description">
           <p>Queries API for data If current year, report runs from Jan 1 to yesterday. If not current year, report runs from Jan 1 to Dec 31 of specified year.</p>
 
+<p>The rationale for confining the reports to year is primarily due to the limtiations of the free <a href="Clockify.html"><code>Clockify</code></a> API. It is easier for me to query two reports and add them together, rather than deal with overlapping data if a project crosses the annual boundary.</p>
+
           <div class="method-source-code" id="get_report-source">
-            <pre><span class="ruby-comment"># File lib/pdf.rb, line 56</span>
+            <pre><span class="ruby-comment"># File lib/pdf.rb, line 61</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_report</span>
   <span class="ruby-ivar">@last_day</span> = <span class="ruby-ivar">@year_changed</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@end_date</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Days</span>.<span class="ruby-identifier">yesterday</span>
   <span class="ruby-ivar">@first_day</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">ordinal</span>(<span class="ruby-ivar">@last_day</span>.<span class="ruby-identifier">year</span>, <span class="ruby-value">1</span>)
@@ -225,7 +227,7 @@
           <p>Outputs PDF to spec</p>
 
           <div class="method-source-code" id="output-source">
-            <pre><span class="ruby-comment"># File lib/pdf.rb, line 76</span>
+            <pre><span class="ruby-comment"># File lib/pdf.rb, line 81</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">output</span>(<span class="ruby-identifier">base_dir</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@projects</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">positive?</span>
     <span class="ruby-identifier">report_template</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-node">&quot;#{__dir__}/report_template.erb&quot;</span>)
