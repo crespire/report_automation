@@ -86,21 +86,23 @@
 
 <p>This repository has classes and a script that make it easy to query for information about tasks, etc. The main.rb script takes input and outputs the appropriate files.</p>
 
-<p>The <a href="OutputPdf.html"><code>OutputPdf</code></a> spits out a report of annual tasks/hours. The user enters hours already invoice which is used to provide a billing summary at the bottom of the report. Due to a limitation with the free <a href="Clockify.html"><code>Clockify</code></a> API access, reporting is only confined to a year.</p>
+<p>The <a href="OutputPdf.html"><code>OutputPdf</code></a> spits out a report of annual tasks/hours. The user enters hours already invoice which is used to provide a billing summary at the bottom of the report.</p>
 
 <p>The <a href="OutputXlsx.html"><code>OutputXlsx</code></a> class queries <a href="Clockify.html"><code>Clockify</code></a> for a weekly detailed report and generates workbook with 1 worksheet per project for the given client. The worksheet lists of all tasks that belong to the project, aggregated by day and user.</p>
 
 <p>A week runs from Monday @ midnight through to the following Sunday at 23:59:59. The API is able to query the current week, but data won’t be complete for said week.</p>
 
+<p>A year runs from Jan 1 @ midnight through to either yesterday (if current year) or December 31st if the year has changed. For rationale, consult documentation.</p>
+
 <p>The API class has a method to call up detailed reports based on whatever client name you want, and whatever date range you want.</p>
 
-<h1 id="label-Full+and+Half+Day+Calculations">Full and Half Day Calculations<span><a href="#label-Full+and+Half+Day+Calculations">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h2 id="label-Full+and+Half+Day+Calculations">Full and Half Day Calculations<span><a href="#label-Full+and+Half+Day+Calculations">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>Currently, full and half days are calculated as such. For every user and day, time that: * totals over 8 hours is recorded as a day and a half * totals to between 4 and 8 hours (inclusive) is recorded as a day * totals to less than 4 hours is recorded as a half day</p>
 
 <h1 id="label-How+to+Run">How to Run<span><a href="#label-How+to+Run">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p>In order to run this locally, clone the repository and set up the following: * <code>clockify.yml</code>, a YAML file with a key “auth” - this should be added to the  <code>.gitignore</code> so your API key is not exposed. * Update <code>config.yml</code> to set the base output directory as well as default <a href="Clockify.html"><code>Clockify</code></a> workspace.</p>
+<p>In order to run this locally, clone the repository and set up the following: * <code>clockify.yml</code>, a YAML file with a key “auth” - this should be added to the  <code>.gitignore</code> so your API key is not exposed. * Update <code>config.yml</code> to set the base output directory as well as default <a href="Clockify.html"><code>Clockify</code></a> workspace. * Run <code>bundle install</code> to install dependencies. * Access the program by running <code>ruby main.rb</code> in the working directory root.</p>
 
 </main>
 
