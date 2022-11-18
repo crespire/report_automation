@@ -102,7 +102,6 @@ class OutputXlsx
 
   ##
   # Utilize Axlsx to generate output file.
-
   def output
     date = Date.today
     puts "Generating report for week #{@last_start.cweek}."
@@ -145,34 +144,68 @@ class OutputXlsx
           )
 
           row_ind = 3
-          tasks_array.each do |task|
-            sheet.add_row(
-              [
-                project.to_s,
-                task[:client],
-                task[:description],
-                task[:task],
-                task[:user],
-                task[:email],
-                task[:billable],
-                task[:start_date],
-                task[:start_time],
-                task[:end_date],
-                task[:end_time],
-                task[:duration_h],
-                task[:duration_d],
-                task[:rate],
-                task[:amount],
-                task[:user],
-                "=IF(M#{row_ind}>4,1,0)",
-                "=IF(OR(M#{row_ind}>8,M#{row_ind}<=4),1,0)"
-              ],
-              style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, money_style, money_style, nil, nil, nil]
-            )
-            row_ind += 1
+          grouped_tasks = tasks_array.group_by { |task| task[:start_date] }
+          grouped_tasks.each do |day, tasks|
+            by_user = tasks.group_by { |task| task[:user] }
+            by_user.each do |user, user_tasks|
+              user_day_hours = 0
+              user_tasks.each do |task|
+                user_day_hours += task[:duration_d]
+                sheet.add_row(
+                  [
+                    project.to_s,
+                    task[:client],
+                    task[:description],
+                    task[:task],
+                    task[:user],
+                    task[:email],
+                    task[:billable],
+                    task[:start_date],
+                    task[:start_time],
+                    task[:end_date],
+                    task[:end_time],
+                    task[:duration_h],
+                    task[:duration_d],
+                    task[:rate],
+                    task[:amount],
+                    task[:user]
+                  ]
+                )
+                row_ind += 1
+              end
+
+              # Summary row per user, per day
+              sheet.add_row(
+                [
+                  nil,
+                  nil,
+                  "Total for #{user} (#{day})",
+                  nil,
+                  nil,
+                  nil,
+                  nil,
+                  nil,
+                  nil,
+                  nil,
+                  nil,
+                  nil,
+                  user_day_hours,
+                  nil,
+                  nil,
+                  nil,
+                  "=IF(M#{row_ind}>4,1,0)",
+                  "=IF(OR(M#{row_ind}>8,M#{row_ind}<=4),1,0)"
+                ],
+                style: bold_text
+              )
+              row_ind += 1
+            end
+
+            # Spacer row between days
+            sheet.add_row
           end
 
-          sheet.add_row ["=SUM(Q3:Q#{row_ind - 1})", "=SUM(R3:R#{row_ind - 1})"], offset: 16, style: bold_text
+          sheet.add_row ['TOTAL', "=SUM(Q3:Q#{row_ind - 1})", "=SUM(R3:R#{row_ind - 1})"], offset: 15, style: bold_text
           sheet.column_widths 15, 10, 35, 10, 15, 15, 5, 10, 10, 10, 10, 10, 7, 10, 10, 10, 5, 5
         end
 
@@ -183,6 +216,3 @@ class OutputXlsx
     true
   end
 end
-
-
-
