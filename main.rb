@@ -19,10 +19,11 @@ CLOCKIFY_API = Clockify.new
 
 continue = true
 while continue
-  puts 'This script queries Designstor Clockify for data'
+  system('clear') || system('cls')
+  puts "This script queries Designstor's Clockify workspace for data."
   puts 'You can:'
-  puts '> Output (p)df billing summarys.'
-  puts '> Output (s)heet with project/task breakdowns.'
+  puts '> Output (p)df billing summarys (annual).'
+  puts '> Output (s)heet with project/task breakdowns (weekly).'
   puts '> E(x)it the program.'
 
   input = nil
@@ -73,7 +74,7 @@ while continue
   file.get_report
   file.output(path)
 
-  print 'Do something else? (y/n) '
+  print 'Make more reports? (y/n) '
   continue = gets.chomp == 'y'
   system('clear') || system('cls') if continue
   puts 'Bye!' unless continue
