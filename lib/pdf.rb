@@ -53,6 +53,11 @@ class OutputPdf
   # Queries API for data
   # If current year, report runs from Jan 1 to yesterday.
   # If not current year, report runs from Jan 1 to Dec 31 of specified year.
+  #
+  # The rationale for confining the reports to year is primarily due to the
+  # limtiations of the free Clockify API. It is easier for me to query two
+  # reports and add them together, rather than deal with overlapping data if a
+  # project crosses the annual boundary.
   def get_report
     @last_day = @year_changed ? @end_date : Days.yesterday
     @first_day = Date.ordinal(@last_day.year, 1)
