@@ -102,6 +102,7 @@ class OutputXlsx
 
   ##
   # Utilize Axlsx to generate output file.
+
   def output
     date = Date.today
     puts "Generating report for week #{@last_start.cweek}."
@@ -203,6 +204,7 @@ class OutputXlsx
 
             # Spacer row between days
             sheet.add_row
+            row_ind += 1
           end
 
           sheet.add_row ['TOTAL', "=SUM(Q3:Q#{row_ind - 1})", "=SUM(R3:R#{row_ind - 1})"], offset: 15, style: bold_text
