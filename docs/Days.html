@@ -107,7 +107,7 @@
           <p>Provides the start and end dates for a given <code>week</code> in the given <code>year</code></p>
 
           <div class="method-source-code" id="get_days-source">
-            <pre><span class="ruby-comment"># File days.rb, line 22</span>
+            <pre><span class="ruby-comment"># File lib/days.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">get_days</span>(<span class="ruby-identifier">week</span>, <span class="ruby-identifier">year</span>)
   <span class="ruby-identifier">start_day</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">commercial</span>(<span class="ruby-identifier">year</span>, <span class="ruby-identifier">week</span>, <span class="ruby-value">1</span>)
   <span class="ruby-identifier">end_day</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">commercial</span>(<span class="ruby-identifier">year</span>, <span class="ruby-identifier">week</span>, <span class="ruby-value">7</span>)
@@ -132,7 +132,7 @@
 <p><code>date</code> is the date object you want to count from <code>weekday</code> is the target day you want to get back</p>
 
           <div class="method-source-code" id="prior_weekday-source">
-            <pre><span class="ruby-comment"># File days.rb, line 13</span>
+            <pre><span class="ruby-comment"># File lib/days.rb, line 13</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">prior_weekday</span>(<span class="ruby-identifier">date</span>, <span class="ruby-identifier">weekday</span>)
   <span class="ruby-identifier">weekday_index</span> = <span class="ruby-constant">Date</span><span class="ruby-operator">::</span><span class="ruby-constant">DAYNAMES</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">weekday</span>)
   <span class="ruby-identifier">days_before</span> = (<span class="ruby-identifier">date</span>.<span class="ruby-identifier">wday</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">weekday_index</span>) <span class="ruby-operator">%</span> <span class="ruby-value">7</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
