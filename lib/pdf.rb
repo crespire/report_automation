@@ -15,6 +15,7 @@ class OutputPdf
   ##
   # Initalize all instance variables
   def initialize(api)
+    @api = api
     @projects = Hash.new do |hash, key| 
       hash[key] = Hash.new do |projects, week|
         projects[week] = Hash.new do |week, user|
@@ -28,7 +29,8 @@ class OutputPdf
     @end_date = Date.today
     @year_changed = false
     @client = nil
-    @api = api
+    @last_day = nil
+    @first_day = nil
   end
 
   ##
@@ -49,23 +51,17 @@ class OutputPdf
 
   ##
   # Queries API for data
-  # If the year has not changed, the report is only pulled to the last Sunday.
+  # If the year has not changed, the report is pulled to yesterday.
   # If the year has changed, the last day is set to December 31 of the specified year.
   def get_report
-    last_day = @year_changed ? @end_date : Days.prior_weekday(@end_date, 'Sunday')
-    year_start = Date.ordinal(last_day.year, 1)
-    json = @api.detailed_report(year_start, last_day)
+    @last_day = @year_changed ? @end_date : Days.yesterday
+    @first_day = Date.ordinal(@last_day.year, 1)
+    json = @api.detailed_report(@first_day, @last_day)
 
     abort("JSON: #{json['code']} > #{json['message']}") if json.key?('code')
 
     json['timeentries'].each do |entry|
       float_time = entry['timeInterval']['duration'] / (60 * 60.0)
-
-      if entry['tags'].any? { |hash| hash.value?('Billed') }
-        @billed_tasks[entry['projectName']].push(float_time)
-        next
-      end
-
       date = Date.iso8601(entry['timeInterval']['start'])
       week = date.cweek
       @projects[entry['projectName']][week][entry['userName']][date] << float_time
@@ -82,7 +78,6 @@ class OutputPdf
       report_template = File.read("#{__dir__}/report_template.erb")
       erb = ERB.new(report_template, trim_mode: '<>')
 
-      date = Days.prior_weekday(@end_date, 'Friday')
       output_dir = "#{base_dir}/#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime("%Y%b%d")}"
       puts "Output dir: #{output_dir}"
       FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
@@ -90,25 +85,19 @@ class OutputPdf
       puts 'Each project below will require input on days already billed.'
       @projects.each_key { |proj| puts "-> #{proj}" }
 
-      puts "Enter 'skip' or 's' to skip output for that project."
+      puts "Enter nothing, 'skip' or 's' to skip output for that project."
       puts '-' * 80
-      puts
       @projects.each do |proj, weeks|
         print "Total days invoiced on #{proj}: "
         days_billed = gets.chomp
-        next if %w[skip s].include?(days_billed)
+        next if %w[skip s].include?(days_billed) || days_billed.length.zero?
 
         days_billed = days_billed.gsub(/\s+/, '').split('+').sum(&:to_f)
-        prev_billed_days = @billed_tasks.key?(proj) ? (@billed_tasks[proj].sum / 8).round(1) : 0
         report = erb.result(binding)
         filename = "#{output_dir}/#{@client}_#{proj} Report.pdf"
         pdf = WickedPdf.new.pdf_from_string(report)
         File.open(filename, 'w') { |file| file.puts pdf }
-      end
-    else
-      puts 'No unbilled tasks found, a summary of all the billed tasks processed follows.'
-      @billed_tasks.each do |k, v|
-        puts "=> Project: #{k} has #{(v.reduce(:+) / 8).round(1)} billed days."
+        puts "Report written to: #{filename}"
       end
     end
 
