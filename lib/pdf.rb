@@ -51,8 +51,8 @@ class OutputPdf
 
   ##
   # Queries API for data
-  # If the year has not changed, the report is pulled to yesterday.
-  # If the year has changed, the last day is set to December 31 of the specified year.
+  # If current year, report runs from Jan 1 to yesterday.
+  # If not current year, report runs from Jan 1 to Dec 31 of specified year.
   def get_report
     @last_day = @year_changed ? @end_date : Days.yesterday
     @first_day = Date.ordinal(@last_day.year, 1)
