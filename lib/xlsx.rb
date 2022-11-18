@@ -103,10 +103,10 @@ class OutputXlsx
   ##
   # Utilize Axlsx to generate output file.
 
-  def output
+  def output(base_dir)
     date = Date.today
     puts "Generating report for week #{@last_start.cweek}."
-    output_dir = "/media/sf_vm-shared/reports/#{@last_start.cwyear}/wk#{@last_end.cweek}/xlsx-gen-#{date.strftime("%Y%b%d")}"
+    output_dir = "#{base_dir}#{@last_start.cwyear}/wk#{@last_end.cweek}/xlsx-gen-#{date.strftime("%Y%b%d")}"
     puts "Output dir: #{output_dir}"
     FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
 

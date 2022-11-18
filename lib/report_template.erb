@@ -68,8 +68,9 @@
     <p>Previously billed days: <%= "#{prev_billed_days}" %>
     <% if days_billed.positive? %>
         <p>Days already invoiced for project: <%= "#{days_billed} full days." %></p>
-        <p>Days invoiced available to cover outstanding unbilled days: <%= "#{(days_billed.to_f - prev_billed_days).round(1)}"%>
-        <p>Days outstanding for project: <%= "#{((all_tally[0] + (all_tally[1]/2.0).round(1)) - (days_billed.to_f - prev_billed_days)).round(1)}" %>
+        <p>Days invoiced available to cover outstanding unbilled days: <%= "#{(days_billed.to_f - prev_billed_days).round(1)}"%></p>
+        <p>Days outstanding for project<sup>*</sup>: <%= "#{((all_tally[0] + (all_tally[1]/2.0).round(1)) - (days_billed.to_f - prev_billed_days)).round(1)}" %></p>
+        <span style="font-size: 0.75rem"><sup>*</sup> Negative values indicate we have runway, positive values mean we are overbudget for the currently billed status.</span>
     <% end %>
 </body>
 </html>

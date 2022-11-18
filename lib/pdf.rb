@@ -29,6 +29,7 @@ class OutputPdf
     @end_date = Date.today
     @year_changed = false
     @client = File.open('.defaultclient') { |file| file.readline }
+    @api = Clockify.new
   end
 
   ##
@@ -87,13 +88,13 @@ class OutputPdf
   ##
   # Outputs PDF to spec
 
-  def output
+  def output(base_dir)
     if @projects.size.positive?
-      report_template = File.read('report_template.erb')
+      report_template = File.read("#{__dir__}/report_template.erb")
       erb = ERB.new(report_template, trim_mode: '<>')
 
       date = Days.prior_weekday(@end_date, 'Friday')
-      output_dir = "/media/sf_vm-shared/reports/#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime("%Y%b%d")}"
+      output_dir = "#{base_dir}#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime("%Y%b%d")}"
       puts "Output dir: #{output_dir}"
       FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
       puts '-' * 80
