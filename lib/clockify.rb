@@ -56,13 +56,14 @@ class Clockify
   def set_client
     @clients ||= client_list
     selected_client = nil
-    @client_names ||= @clients.map { |client| client['name'] }
-    puts 'Clients available:'
-    @client_names.each { |client| puts "> #{client}" }
+    list_clients
     puts "There are #{@client_names.length} clients available."
     until @client_names.include?(selected_client)
       print 'Which client shall we query? '
       selected_client = gets.chomp
+      puts "Client not found: #{selected_client}" unless @client_names.include?(selected_client)
+      puts "You can also enter 'l' if you want to see the client list again." unless selected_client.nil? || @client_names.include?(selected_client)
+      list_clients if selected_client == 'l'
     end
     @active_client = selected_client
   end
@@ -99,5 +100,15 @@ class Clockify
     }.to_json
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
     JSON.parse(response.body)
+  end
+
+  private
+
+  ##
+  # List clients in terminal
+  def list_clients
+    @client_names ||= @clients.map { |client| client['name'] }
+    puts 'Clients available:'
+    @client_names.each { |client| puts "> #{client}" }
   end
 end
