@@ -1,30 +1,36 @@
 require 'date'
 require 'time'
 require 'fileutils'
+require 'yaml'
 
 require_relative 'lib/pdf'
 require_relative 'lib/xlsx'
+require_relative 'lib/clockify'
 
-BASE_OUTPUT_DIR = '/media/sf_vm-shared/reports/'
+CONFIG = YAML.load_file('config.yml')
+
+BASE_OUTPUT_DIR = CONFIG['output']
+CLOCKIFY_API = Clockify.new
 
 continue = true
 while continue
-  input = nil
   puts 'This script queries Designstor Clockify for data'
-  puts "Please choose what you'd like to do."
-  puts 'Output (p)df billing summarys.'
-  puts 'Output (s)heet with project/task breakdowns.'
-  print 'You can also e(x)it: '
-  input = gets.chomp until ['p', 's', 'x'].include?(input)
+  puts 'You can:'
+  puts '> Output (p)df billing summarys.'
+  puts '> Output (s)heet with project/task breakdowns.'
+  puts '> E(x)it the program.'
+
+  input = nil
+  until %w[p s x].include?(input)
+    print 'What would you like to do? '
+    input = gets.chomp.downcase
+  end
 
   abort('Exiting...') if input == 'x'
-
-  default_client = File.open('.defaultclient') { |file| file.readline }
 
   puts "The base output directory is currently set to: #{BASE_OUTPUT_DIR}"
   print 'Change output directory? (y/n) '
   change_dir = gets.chomp
-  output_dir = nil
 
   if change_dir == 'y'
     puts 'If this directory does not exist, it will be created.'
@@ -35,15 +41,14 @@ while continue
   path = output_dir || BASE_OUTPUT_DIR
 
   if input == 'p'
-    file = OutputPdf.new
+    file = OutputPdf.new(CLOCKIFY_API)
     puts 'The PDF, by default, retrieves tasks for the current year.'
     print 'Did you want to retrieve a different year? (y/n) '
     year_change = gets.chomp
 
     file.change_year if year_change == 'y'
   else
-    file = OutputXlsx.new
-    week_change = nil
+    file = OutputXlsx.new(CLOCKIFY_API)
     puts "The spreadsheet retrieves the weekly period from last Monday to last Sunday (Wk##{file.default_range_week}) by default."
     print 'Did you want to change the week being retreived? (y/n) '
     week_change = gets.chomp
@@ -51,11 +56,14 @@ while continue
     file.custom_range if week_change == 'y'
   end
 
-  puts "#{default_client} is the default client, but we can query others."
-  print 'Query different client? (y/n) '
-  client_change = gets.chomp
-
-  file.change_client if client_change == 'y'
+  if CLOCKIFY_API.active_client
+    puts "The current client is #{CLOCKIFY_API.active_client}."
+    print 'Did you want to change clients? (y/n) '
+    client_change = gets.chomp
+    file.set_client if client_change == 'y'
+  else
+    file.set_client
+  end
 
   file.get_report
   file.output(path)

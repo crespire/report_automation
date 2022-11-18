@@ -9,3 +9,9 @@ The OutputXlsx class queries Clockify for the last week's detailed report and ge
 A week runs from Monday @ midnight through to the following Sunday at 23:59:59. The API is able to query the current week, but data won't be complete for said week.
 
 The API class has a method to call up detailed reports based on whatever client name you want, and whatever date range you want.
+
+# How to Run
+In order to run this locally, clone the repository and set up the following:
+* `clockify.yml`, a YAML file with a key "auth" - this should be added to the
+  `.gitignore` so your API key is not exposed.
+* Update `config.yml` to set the base output directory as well as default Clockify workspace.

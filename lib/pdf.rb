@@ -4,7 +4,6 @@ require 'time'
 require 'erb'
 require 'wicked_pdf'
 require 'fileutils'
-require_relative 'clockify'
 require_relative 'days'
 
 ##
@@ -15,7 +14,7 @@ class OutputPdf
 
   ##
   # Initalize all instance variables
-  def initialize
+  def initialize(api)
     @projects = Hash.new do |hash, key| 
       hash[key] = Hash.new do |projects, week|
         projects[week] = Hash.new do |week, user|
@@ -28,8 +27,8 @@ class OutputPdf
     @billed_tasks = Hash.new { |hash, key| hash[key] = [] }
     @end_date = Date.today
     @year_changed = false
-    @client = File.open('.defaultclient') { |file| file.readline }
-    @api = Clockify.new
+    @client = nil
+    @api = api
   end
 
   ##
@@ -43,18 +42,9 @@ class OutputPdf
   end
 
   ##
-  # Set non-default client
-  def change_client
-    client_list = @api.get_client_list
-    selected_client = nil
-    names = client_list.map { |client| client['name'] }
-    puts 'Clients available:'
-    names.each { |client| puts client }
-    until names.include?(selected_client)
-      print 'Which client shall we query? '
-      selected_client = gets.chomp
-    end
-    @client = selected_client
+  # Set client via API
+  def set_client
+    @client = @api.set_client
   end
 
   ##
@@ -62,10 +52,9 @@ class OutputPdf
   # If the year has not changed, the report is only pulled to the last Sunday.
   # If the year has changed, the last day is set to December 31 of the specified year.
   def get_report
-    api = Clockify.new
     last_day = @year_changed ? @end_date : Days.prior_weekday(@end_date, 'Sunday')
     year_start = Date.ordinal(last_day.year, 1)
-    json = api.detailed_report(@client, year_start, last_day)
+    json = @api.detailed_report(year_start, last_day)
 
     abort("JSON: #{json['code']} > #{json['message']}") if json.key?('code')
 
@@ -94,7 +83,7 @@ class OutputPdf
       erb = ERB.new(report_template, trim_mode: '<>')
 
       date = Days.prior_weekday(@end_date, 'Friday')
-      output_dir = "#{base_dir}#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime("%Y%b%d")}"
+      output_dir = "#{base_dir}/#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime("%Y%b%d")}"
       puts "Output dir: #{output_dir}"
       FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
       puts '-' * 80
