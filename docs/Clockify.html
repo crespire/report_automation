@@ -225,7 +225,7 @@
 <p><code>end_date</code> is a string in the number format “%Y-%m-%d”</p>
 
           <div class="method-source-code" id="detailed_report-source">
-            <pre><span class="ruby-comment"># File lib/clockify.rb, line 77</span>
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 78</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">detailed_report</span>(<span class="ruby-identifier">start_date</span>, <span class="ruby-identifier">end_date</span>)
   <span class="ruby-ivar">@active_client</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">set_client</span>
   <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Requesting data for #{@active_client} from #{start_date} to #{end_date}&quot;</span>
@@ -273,13 +273,14 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_client</span>
   <span class="ruby-ivar">@clients</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">client_list</span>
   <span class="ruby-identifier">selected_client</span> = <span class="ruby-keyword">nil</span>
-  <span class="ruby-ivar">@client_names</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@clients</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">client</span><span class="ruby-operator">|</span> <span class="ruby-identifier">client</span>[<span class="ruby-string">&#39;name&#39;</span>] }
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&#39;Clients available:&#39;</span>
-  <span class="ruby-ivar">@client_names</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">client</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;&gt; #{client}&quot;</span> }
+  <span class="ruby-identifier">list_clients</span>
   <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;There are #{@client_names.length} clients available.&quot;</span>
   <span class="ruby-keyword">until</span> <span class="ruby-ivar">@client_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">selected_client</span>)
     <span class="ruby-identifier">print</span> <span class="ruby-string">&#39;Which client shall we query? &#39;</span>
     <span class="ruby-identifier">selected_client</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Client not found: #{selected_client}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@client_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">selected_client</span>)
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;You can also enter &#39;l&#39; if you want to see the client list again.&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">selected_client</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@client_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">selected_client</span>)
+    <span class="ruby-identifier">list_clients</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">selected_client</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;l&#39;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@active_client</span> = <span class="ruby-identifier">selected_client</span>
 <span class="ruby-keyword">end</span></pre>

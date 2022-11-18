@@ -68,6 +68,7 @@
   <ul class="link-list" role="directory">
     <li ><a href="#method-c-get_days">::get_days</a>
     <li ><a href="#method-c-prior_weekday">::prior_weekday</a>
+    <li ><a href="#method-c-yesterday">::yesterday</a>
   </ul>
 </div>
 
@@ -107,7 +108,7 @@
           <p>Provides the start and end dates for a given <code>week</code> in the given <code>year</code></p>
 
           <div class="method-source-code" id="get_days-source">
-            <pre><span class="ruby-comment"># File lib/days.rb, line 22</span>
+            <pre><span class="ruby-comment"># File lib/days.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">get_days</span>(<span class="ruby-identifier">week</span>, <span class="ruby-identifier">year</span>)
   <span class="ruby-identifier">start_day</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">commercial</span>(<span class="ruby-identifier">year</span>, <span class="ruby-identifier">week</span>, <span class="ruby-value">1</span>)
   <span class="ruby-identifier">end_day</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">commercial</span>(<span class="ruby-identifier">year</span>, <span class="ruby-identifier">week</span>, <span class="ruby-value">7</span>)
@@ -137,6 +138,27 @@
   <span class="ruby-identifier">weekday_index</span> = <span class="ruby-constant">Date</span><span class="ruby-operator">::</span><span class="ruby-constant">DAYNAMES</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">weekday</span>)
   <span class="ruby-identifier">days_before</span> = (<span class="ruby-identifier">date</span>.<span class="ruby-identifier">wday</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">weekday_index</span>) <span class="ruby-operator">%</span> <span class="ruby-value">7</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
   <span class="ruby-identifier">date</span>.<span class="ruby-identifier">to_date</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">days_before</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-yesterday" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">yesterday</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Provides date for yesterday.</p>
+
+          <div class="method-source-code" id="yesterday-source">
+            <pre><span class="ruby-comment"># File lib/days.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">yesterday</span>
+  <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>.<span class="ruby-identifier">prev_day</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
