@@ -22,3 +22,5 @@ In order to run this locally, clone the repository and set up the following:
 * `clockify.yml`, a YAML file with a key "auth" - this should be added to the
   `.gitignore` so your API key is not exposed.
 * Update `config.yml` to set the base output directory as well as default Clockify workspace.
+* Run `bundle install` to install dependencies.
+* Access the program by running `ruby main.rb` in the working directory root.
