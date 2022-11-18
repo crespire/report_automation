@@ -39,9 +39,10 @@ class OutputPdf
   def change_year
     print 'What year would you like to retrieve? '
     input = gets.chomp
-    @end_date = Date.new(input.to_i, 12, 31)
-    return if @end_date.cwyear > Date.today.cwyear
+    check_date = Date.new(input.to_i, 12, 31)
+    return if check_date.cwyear > Date.today.cwyear
 
+    @end_date = check_date
     @year_changed = true unless @end_date.cwyear == Date.today.cwyear
   end
 
