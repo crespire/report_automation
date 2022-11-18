@@ -68,7 +68,7 @@ class Clockify
   end
 
   ##
-  # Creates a detailed report based on the inputs provided.
+  # Creates a detailed report for the current +@active_client+ based on the date range provided.
   #
   # +start_date+ is a string in the number format "%Y-%m-%d"
   #
