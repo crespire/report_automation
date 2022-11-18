@@ -51,6 +51,8 @@ class Clockify
     end
   end
 
+  ##
+  # Sets the active client for the API instance
   def set_client
     @clients ||= client_list
     selected_client = nil
@@ -67,8 +69,6 @@ class Clockify
 
   ##
   # Creates a detailed report based on the inputs provided.
-  #
-  # +client+ is a string representation of the client's name.
   #
   # +start_date+ is a string in the number format "%Y-%m-%d"
   #
