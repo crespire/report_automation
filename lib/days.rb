@@ -17,6 +17,13 @@ module Days
   end
 
   ##
+  # Provides date for yesterday.
+
+  def self.yesterday
+    Date.today.prev_day
+  end
+
+  ##
   # Provides the start and end dates for a given +week+ in the given +year+
   
   def self.get_days(week, year)
