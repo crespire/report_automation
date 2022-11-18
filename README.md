@@ -2,15 +2,16 @@
 
 This repository has classes and a script that make it easy to query for information about tasks, etc. The main.rb script takes input and outputs the appropriate files.
 
-The OutputPdf spits out a report of annual tasks/hours. The user enters hours already invoice which is used to provide a billing summary at the bottom of the report.
+The script first determines what report type the user would like to generate, then asks which client is being reported on.
 
-The OutputXlsx class queries Clockify for a weekly detailed report and generates workbook with 1 worksheet per project for the given client. The worksheet lists of all tasks that belong to the project, aggregated by day and user.
+The OutputPdf spits out a report of annual tasks/hours. The user enters the quoted effort on a project proposal. The report queries all tasks for the date range, breaks them down by week and user, and provides a summary against the quoted effort.
 
-A week runs from Monday @ midnight through to the following Sunday at 23:59:59. The API is able to query the current week, but data won't be complete for said week.
+The OutputXlsx class queries Clockify for a weekly detailed report and generates a workbook with 1 worksheet per project for the given client. The worksheet lists of all tasks that belong to the project, aggregated by day and user.
+
+## Time definitions
+A week runs from Monday @ midnight through to the following Sunday at 23:59:59. Current week query is possible, but data won't be complete (obviously).
 
 A year runs from Jan 1 @ midnight through to either yesterday (if current year) or December 31st if the year has changed. For rationale, consult documentation.
-
-The API class has a method to call up detailed reports based on whatever client name you want, and whatever date range you want.
 
 ## Full and Half Day Calculations
 Currently, full and half days are calculated as such.
