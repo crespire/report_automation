@@ -82,17 +82,17 @@ class OutputPdf
       puts "Output dir: #{output_dir}"
       FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
       puts '-' * 80
-      puts 'Each project below will require input on days already billed.'
+      puts 'Each project below will require input on total effort in proposal.'
       @projects.each_key { |proj| puts "-> #{proj}" }
 
       puts "Enter nothing, 'skip' or 's' to skip output for that project."
       puts '-' * 80
       @projects.each do |proj, weeks|
-        print "Total days invoiced on #{proj}: "
-        days_billed = gets.chomp
-        next if %w[skip s].include?(days_billed) || days_billed.length.zero?
+        print "Total estimated effort/days on #{proj} proposal: "
+        days_proposed = gets.chomp
+        next if %w[skip s].include?(days_proposed) || days_proposed.length.zero?
 
-        days_billed = days_billed.gsub(/\s+/, '').split('+').sum(&:to_f)
+        days_proposed = days_proposed.gsub(/\s+/, '').split('+').sum(&:to_f)
         report = erb.result(binding)
         filename = "#{output_dir}/#{@client}_#{proj} Report.pdf"
         pdf = WickedPdf.new.pdf_from_string(report)

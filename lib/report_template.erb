@@ -14,8 +14,8 @@
 </head>
 <body>
     <h1>Summary for <%= proj %></h1>
-    <p>This table includes all tasks for this project on <a href="https://clockify.me">Clockify</a>.</p>
-    <p>Data range: <strong><%= @first_day.strftime('%Y-%b-%d') %></strong> to <strong><%= @last_day.strftime('%Y-%b-%d') %></strong>, inclusive.</p>
+    <p>This table includes tasks for this project on <a href="https://clockify.me">Clockify</a> <strong>for the date range indicated</strong>.</p>
+    <p>Report date range: <strong><%= @first_day.strftime('%Y-%b-%d') %></strong> to <strong><%= @last_day.strftime('%Y-%b-%d') %></strong>.</p>
     <p>Report generated at <%= "#{Time.now.strftime('%T on %b %d %Y')}" %></p>
     <p><a href='#bill_sum'>Jump to billing summary.</a></p>
     <h2>Task Summary</h2>
@@ -64,12 +64,12 @@
         <% end %>
     <% end %>
     <h2 id='bill_sum'>Project billing status</h2>
-    <p>Effort days summary: <%= "#{all_tally[0]} full, #{all_tally[1]} half" %> days</p>
+    <p>Effort days so far summary: <%= "#{all_tally[0]} full, #{all_tally[1]} half" %> days</p>
     <p>Effort days converted to full: <%= "#{(all_tally[0] + all_tally[1]/2.0).round(1)}" %> days</p>
-    <% if days_billed.positive? %>
-        <p>Billing already invoiced: <%= days_billed %> days</p>
-        <p>Billing summary:<sup>*</sup>: <%= "#{(all_tally[0] + (all_tally[1]/2.0).round(1)) - days_billed.to_f.round(1)}" %> days</p>
-        <span style="font-size: 0.75rem"><sup>*</sup> Negative values indicate we have runway, positive values mean we are overbudget for the currently billed days.</span>
+    <% if days_proposed.positive? %>
+        <p>Project estimated effort: <%= days_proposed %> days</p>
+        <p>Balance of days summary:<sup>*</sup>: <%= "#{(all_tally[0] + (all_tally[1]/2.0).round(1)) - days_proposed.to_f.round(1)}" %> days</p>
+        <span style="font-size: 0.75rem"><sup>*</sup> Negative values indicate we have runway, positive values mean we are overbudget compared to the proposal.</span>
     <% end %>
 </body>
 </html>
