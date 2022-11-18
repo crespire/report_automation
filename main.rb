@@ -29,14 +29,14 @@ until b_exit
   else
     file = OutputXlsx.new
     week_change = nil
-    puts "The worksheet, by default, retrieves the period from last Monday to last Sunday (Wk##{file.default_range_week})."
+    puts "The worksheet retrieves the period from last Monday to last Sunday (Wk##{file.default_range_week})."
     print 'Did you want to change the week being retreived? (y/n) '
     week_change = gets.chomp
 
     file.custom_range if week_change == 'y'
 
     puts "#{default_client} is the default client, but we can query others."
-    print 'Query different client? '
+    print 'Query different client? (y/n) '
     client_change = gets.chomp
 
     file.change_client if client_change == 'y'
