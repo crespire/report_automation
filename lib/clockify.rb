@@ -2,6 +2,8 @@ require 'json'
 require 'net/http'
 require 'yaml'
 
+##
+# API Key Loader
 CLOCKIFY = YAML.load_file('clockify.yml')
 
 ##

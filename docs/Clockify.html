@@ -132,7 +132,7 @@
           <p>Creates a new instance of the API and initializes the API key.</p>
 
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/clockify.rb, line 17</span>
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 19</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>
   <span class="ruby-ivar">@authkey</span> = <span class="ruby-constant">CLOCKIFY</span>[<span class="ruby-string">&#39;auth&#39;</span>]
   <span class="ruby-ivar">@workspace</span> = <span class="ruby-constant">CONFIG</span>[<span class="ruby-string">&#39;workspace&#39;</span>]
@@ -166,7 +166,7 @@
           <p>Retreives the client ID based on <code>search</code> name provided.</p>
 
           <div class="method-source-code" id="client_id-source">
-            <pre><span class="ruby-comment"># File lib/clockify.rb, line 46</span>
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">client_id</span>(<span class="ruby-identifier">search</span>)
   <span class="ruby-identifier">client_list</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@clients</span>.<span class="ruby-identifier">nil?</span>
 
@@ -193,7 +193,7 @@
 <p>The option boolean <code>force</code> can be provided to update from API even if client list is populated. It defaults to false.</p>
 
           <div class="method-source-code" id="client_list-source">
-            <pre><span class="ruby-comment"># File lib/clockify.rb, line 32</span>
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">client_list</span>(<span class="ruby-value">force:</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@clients</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">force</span>
 
@@ -225,7 +225,7 @@
 <p><code>end_date</code> is a string in the number format “%Y-%m-%d”</p>
 
           <div class="method-source-code" id="detailed_report-source">
-            <pre><span class="ruby-comment"># File lib/clockify.rb, line 78</span>
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 80</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">detailed_report</span>(<span class="ruby-identifier">start_date</span>, <span class="ruby-identifier">end_date</span>)
   <span class="ruby-ivar">@active_client</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">set_client</span>
   <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Requesting data for #{@active_client} from #{start_date} to #{end_date}&quot;</span>
@@ -269,7 +269,7 @@
           <p>Sets the active client for the API instance</p>
 
           <div class="method-source-code" id="set_client-source">
-            <pre><span class="ruby-comment"># File lib/clockify.rb, line 56</span>
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 58</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_client</span>
   <span class="ruby-ivar">@clients</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">client_list</span>
   <span class="ruby-identifier">selected_client</span> = <span class="ruby-keyword">nil</span>
