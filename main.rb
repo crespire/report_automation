@@ -17,10 +17,27 @@ CONFIG = YAML.load_file('config.yml')
 # Clockify API instance
 CLOCKIFY_API = Clockify.new
 
+system('clear') || system('cls')
+puts 'Welcome to Designstor report automation.'
+puts 'This script generates reports via the Clockify API.'
+puts "The default directory is currently configured to: #{CONFIG['output']}"
+puts 'You can change this in the config.yml file for future runs.'
+puts 'For the current terminal session, this value will be saved.'
+print 'Would you like to change the output directory for this session? (y/n) '
+change_dir = gets.chomp
+
+if change_dir == 'y'
+  puts 'If this directory does not exist, it will be created.'
+  print 'Path to write the files: '
+  output_dir = gets.chomp
+end
+
+path = output_dir || CONFIG['output']
+
+system('clear') || system('cls')
+
 continue = true
 while continue
-  system('clear') || system('cls')
-  puts "This script queries Designstor's Clockify workspace for data."
   puts 'You can:'
   puts '> Output (p)df billing summarys (annual).'
   puts '> Output (s)heet with project/task breakdowns (weekly).'
@@ -33,18 +50,6 @@ while continue
   end
 
   abort('Exiting...') if input == 'x'
-
-  puts "The base output directory is currently set to: #{CONFIG['output']}"
-  print 'Change output directory? (y/n) '
-  change_dir = gets.chomp
-
-  if change_dir == 'y'
-    puts 'If this directory does not exist, it will be created.'
-    print 'Path to write the files: '
-    output_dir = gets.chomp
-  end
-
-  path = output_dir || CONFIG['output']
 
   if input == 'p'
     file = OutputPdf.new(CLOCKIFY_API)
