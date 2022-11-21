@@ -40,7 +40,11 @@ class OutputPdf
     print 'What year would you like to retrieve? '
     input = gets.chomp
     check_date = Date.new(input.to_i, 12, 31)
-    return if check_date.cwyear > Date.today.cwyear
+    if check_date.cwyear > Date.today.cwyear
+      puts 'Year selected is in the future, using current year.'
+      sleep(1)
+      return
+    end
 
     @end_date = check_date
     @year_changed = true unless @end_date.cwyear == Date.today.cwyear

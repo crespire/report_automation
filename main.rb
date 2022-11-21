@@ -55,7 +55,7 @@ while continue
     file.change_year if year_change == 'y'
   else
     file = OutputXlsx.new(CLOCKIFY_API)
-    puts "The spreadsheet retrieves the weekly period from last Monday to last Sunday (Wk##{file.default_range_week}) by default."
+    puts "The spreadsheet retrieves the weekly period from last Monday to last Sunday (Wk##{file.current_week} in #{file.current_year}) by default."
     print 'Did you want to change the week being retreived? (y/n) '
     week_change = gets.chomp
 

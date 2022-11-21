@@ -30,19 +30,36 @@ class OutputXlsx
   end
 
   ##
-  # Returns week number for default range
-  def default_range_week
+  # Returns week number for current range
+  def current_week
     @last_start.cweek
+  end
+
+  ##
+  # Returns the year for the current range
+  def current_year
+    @last_start.cwyear
   end
 
   ##
   # Get input to generate custom week range
   def custom_range
+    print 'What year? '
+    year = gets.chomp.to_i
+    if year > @last_start.cwyear
+      puts 'Year selected is in the future, defaulting to current year.'
+      year = @last_start.cwyear
+      sleep(1)
+    end
+
     new_week = 0
     print 'What week do you want to retrieve? '
     new_week = gets.chomp.to_i until new_week.between?(1, 53)
-    print 'What year? '
-    year = gets.chomp.to_i
+    if new_week > @last_start.cweek
+      puts 'Week selected is in the future, defaulting to current week.'
+      sleep(1)
+      return
+    end
 
     @last_start, @last_end = Days.get_days(new_week, year)
   end
