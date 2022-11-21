@@ -37,6 +37,6 @@ module Days
   # +date_string+ should be a date in year
   def self.get_days_from_week(year, month, day)
     date = Date.new(year, month, day)
-    get_days(date.cweek, year)
+    get_days(date.cweek, date.cwyear)
   end
 end

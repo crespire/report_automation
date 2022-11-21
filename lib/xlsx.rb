@@ -43,7 +43,12 @@ class OutputXlsx
 
   ##
   # Get input to generate custom week range
-  def custom_range
+  def custom_range(input = nil)
+    if input
+      @last_start, @last_end = Days.get_days_from_week(input.cwyear, input.month, input.day)
+      return
+    end
+
     print 'What year? '
     year = gets.chomp.to_i
     if year > @last_start.cwyear
@@ -66,8 +71,8 @@ class OutputXlsx
 
   ##
   # Set client via API
-  def set_client
-    @client = @api.set_client
+  def set_client(input)
+    @client = @api.set_client(input)
   end
 
   ##

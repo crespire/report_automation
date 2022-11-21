@@ -86,7 +86,7 @@ class Gui
         button('Run report') {
           on_clicked do
             if @report_type.zero?
-              puts 'Generating PDF Report'
+              puts 'Generating annual PDF report...'
               file = OutputPdf.new(CLOCKIFY_API)
               file.set_client(@report_client)
               file.change_year if @report_range.cwyear != Date.today.cwyear
@@ -111,21 +111,22 @@ class Gui
                   data.each { |item| @project_bugets[item[0]] = item[1].to_f }
                   puts @project_bugets
                   file.budgets(@project_bugets)
-                  file.output(@output)
                 end
               }.show
             else
+              puts 'Generating weekly report...'
               file = OutputXlsx.new(CLOCKIFY_API)
               file.set_client(@report_client)
-              puts 'XLSX report'
+              file.custom_range(@report_range)
+              file.get_report
             end
-            # file.output(@output)
+            file.output(@output)
           end
         }
       }
 
       on_closing do
-        puts 'Bye!'
+        puts 'Bye! Thanks for using the GUI!'
       end
     }.show
   end
