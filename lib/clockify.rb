@@ -55,7 +55,9 @@ class Clockify
 
   ##
   # Sets the active client for the API instance
-  def set_client
+  def set_client(input=nil)
+    return @active_client = input if input
+
     @clients ||= client_list
     selected_client = nil
     list_clients
@@ -104,12 +106,17 @@ class Clockify
     JSON.parse(response.body)
   end
 
+  def client_names
+    client_list
+    @client_names ||= @clients.map { |client| client['name'] }
+  end
+
   private
 
   ##
   # List clients in terminal
   def list_clients
-    @client_names ||= @clients.map { |client| client['name'] }
+    client_names
     puts 'Clients available:'
     @client_names.each { |client| puts "> #{client}" }
   end

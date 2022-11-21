@@ -31,4 +31,12 @@ module Days
     end_day = Date.commercial(year, week, 7)
     [start_day, end_day]
   end
+
+  ##
+  # Provides the week given a date
+  # +date_string+ should be a date in year
+  def self.get_days_from_week(year, month, day)
+    date = Date.new(year, month, day)
+    get_days(date.cweek, year)
+  end
 end
