@@ -43,9 +43,10 @@ class OutputXlsx
 
   ##
   # Get input to generate custom week range
-  def custom_range(input = nil)
-    if input
-      @last_start, @last_end = Days.get_days_from_week(input.cwyear, input.month, input.day)
+  # Takes optional +date+ parameter, abd skips input prompts.
+  def custom_range(date = nil)
+    if date
+      @last_start, @last_end = Days.get_days_from_week(date.cwyear, date.month, date.day)
       return
     end
 
@@ -71,8 +72,9 @@ class OutputXlsx
 
   ##
   # Set client via API
-  def set_client(input)
-    @client = @api.set_client(input)
+  # Takes optional +client+ input
+  def set_client(client = nil)
+    @client = @api.set_client(client)
   end
 
   ##

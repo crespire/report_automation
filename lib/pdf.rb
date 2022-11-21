@@ -38,13 +38,13 @@ class OutputPdf
 
   ##
   # Sets the end_date to Dec 31 of the year specified.
-
-  def change_year(input = nil)
-    if input
-      if input.cwyear > Date.today.cwyear
+  # Takes optional +date+ input and skips input prompts.
+  def change_year(date = nil)
+    if date
+      if date.cwyear > Date.today.cwyear
         @end_date = Date.today
       else
-        @end_date = input
+        @end_date = date
         @year_changed = true
       end
 
@@ -66,8 +66,9 @@ class OutputPdf
 
   ##
   # Set client via API
-  def set_client(input)
-    @client = @api.set_client(input)
+  # Takes optional +client+ input
+  def set_client(client = nil)
+    @client = @api.set_client(client)
   end
 
   ##
@@ -96,10 +97,13 @@ class OutputPdf
     true
   end
   
-  def budgets(input = nil)
-    return unless input.is_a? Hash
+  ##
+  # Sets up project budgets
+  # +budgets_hash+ is a hash with project name keys and a float value for each project.
+  def budgets(budgets_hash = nil)
+    return unless budgets_hash.is_a? Hash
 
-    @project_budgets = input
+    @project_budgets = budgets_hash
   end
 
   ##
@@ -113,7 +117,7 @@ class OutputPdf
       output_dir = "#{base_dir}/#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime("%Y%b%d")}"
       puts "Output dir: #{output_dir}"
       FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
-      
+
       # Only prompt if CLI
       if @project_budgets.length.zero?
         puts '-' * 80
@@ -126,7 +130,7 @@ class OutputPdf
 
       @projects.each do |proj, weeks|
         if @project_budgets.key?(proj)
-          next if @project_budgets[proj].zero?
+          next if @project_budgets[proj].zero? # 's'.to_f == 0.0
 
           days_proposed = @project_budgets[proj]
         else
