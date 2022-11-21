@@ -8,3 +8,5 @@ gem "axlsx_styler", "~> 1.2"
 gem "caxlsx", "~> 3.2"
 
 gem "erb", "~> 3.0"
+
+gem 'glimmer-dsl-libui', '~> 0.5.24'
