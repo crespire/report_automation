@@ -1,4 +1,5 @@
 require 'glimmer-dsl-libui'
+require 'glimmer/rake_task'
 require 'date'
 require 'time'
 require 'fileutils'
@@ -31,12 +32,12 @@ class Gui
     @report_type = 0
     @report_range = Date.today
     @clients = CLOCKIFY_API.client_names
-    @project_bugets = {}
+    @project_budgets = {}
   end
 
   def launch
     window {
-      title 'Test'
+      title 'DSReportBeaver'
       margined true
 
       vertical_box {
@@ -108,9 +109,10 @@ class Gui
                 }
 
                 on_closing do
-                  data.each { |item| @project_bugets[item[0]] = item[1].to_f }
-                  puts @project_bugets
-                  file.budgets(@project_bugets)
+                  data.each { |item| @project_budgets[item[0]] = item[1].to_f }
+                  puts @project_budgets
+                  file.budgets(@project_budgets)
+                  file.output(@output)
                 end
               }.show
             else
@@ -119,8 +121,8 @@ class Gui
               file.set_client(@report_client)
               file.custom_range(@report_range)
               file.get_report
+              file.output(@output)
             end
-            file.output(@output)
           end
         }
       }

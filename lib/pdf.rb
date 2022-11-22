@@ -48,7 +48,7 @@ class OutputPdf
         @year_changed = true
       end
 
-      return
+      return @year_changed
     end
 
     print 'What year would you like to retrieve? '

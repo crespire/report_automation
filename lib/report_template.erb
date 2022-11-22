@@ -21,8 +21,8 @@
     <h2>Task Summary</h2>
     <% all_tally = [0, 0] %>
     <% weeks.each do |week, users| %>
-        <% week_start = Date.commercial(2021, week, 1) %>
-        <% week_end = Date.commercial(2021, week, 7) %>
+        <% week_start = Date.commercial(@last_day.cwyear, week, 1) %>
+        <% week_end = Date.commercial(@last_day.cwyear, week, 7) %>
         <h3><%= "Week #{week} (#{week_start.strftime("%B %d")} - #{week_end.strftime("%B %d")})" %></h3>
         <% users.each do |person, days| %>
             <p><strong><%= person %></strong></p>
