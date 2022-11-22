@@ -12,6 +12,10 @@ require_relative 'days'
 class OutputPdf
   include Days
 
+  ##
+  # Hours per stuido day
+  DAY_STANDARD = 7
+
   attr_reader :projects
 
   ##
