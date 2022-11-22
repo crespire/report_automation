@@ -9,6 +9,10 @@ class OutputXlsx
   include Days
 
   ##
+  # Hours per stuido day
+  DAY_STANDARD = 7
+
+  ##
   # Initialize instance variables
 
   def initialize(api)
@@ -153,8 +157,7 @@ class OutputXlsx
               'Billable Rate (CAD)',
               'Billable Amount (CAD)',
               'User',
-              'Full Day',
-              'Half Day'
+              'Full Days'
             ],
             style: bold_text
           )
@@ -211,8 +214,7 @@ class OutputXlsx
                   nil,
                   nil,
                   nil,
-                  "=IF(M#{row_ind}>4,1,0)",
-                  "=IF(OR(M#{row_ind}>8,M#{row_ind}<=4),1,0)"
+                  "=M#{row_ind}/#{DAY_STANDARD}"
                 ],
                 style: bold_text
               )
@@ -242,8 +244,7 @@ class OutputXlsx
                 nil,
                 nil,
                 'Total Days',
-                "=SUM(Q#{day_start_ind}:Q#{row_ind - 1})",
-                "=SUM(R#{day_start_ind}:R#{row_ind - 1})"
+                "=SUM(Q#{day_start_ind}:Q#{row_ind - 1})"
               ],
               style: bold_text
             )
