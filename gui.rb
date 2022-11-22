@@ -61,14 +61,13 @@ class Gui
         label('Report period picker') { stretchy false }
         label("For PDF reports, the selected date's year will be used to generate an annual report") { stretchy false }
         label('For XSLX reports, the selected date will be the week used to generate the weekly report') { stretchy false }
-        label('Dates too far in the future (after current year) will cause reports to run for today.') { stretchy false }
+        label('Dates too far in the future (after current year) will default the date to today.') { stretchy false }
         date_picker { 
           stretchy false
 
           on_changed do |d|
             @report_range = Date.new(d.time[:year], d.time[:mon], d.time[:mday])
             @report_range = @report_range.cwyear > Date.today.cwyear ? Date.today : @report_range
-            puts "Date selected: #{@report_range}"
             $stdout.flush
           end
         }
@@ -79,7 +78,6 @@ class Gui
 
           on_selected do |c|
             @report_client = c.selected_item
-            puts "New client selection: #{@report_client}"
             $stdout.flush # for Windows
           end
         }

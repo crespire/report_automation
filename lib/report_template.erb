@@ -20,9 +20,11 @@
     <p><a href='#bill_sum'>Jump to billing summary.</a></p>
     <h2>Task Summary</h2>
     <% all_tally = [0, 0] %>
+    <% project_hours = 0 %>
     <% weeks.each do |week, users| %>
         <% week_start = Date.commercial(@last_day.cwyear, week, 1) %>
         <% week_end = Date.commercial(@last_day.cwyear, week, 7) %>
+        <% total_weekly_hours = 0 %>
         <h3><%= "Week #{week} (#{week_start.strftime("%B %d")} - #{week_end.strftime("%B %d")})" %></h3>
         <% users.each do |person, days| %>
             <p><strong><%= person %></strong></p>
@@ -56,14 +58,18 @@
                 </tr>
                 <% tally[0] += output[0] %>
                 <% tally[1] += output[1] %>
+                <% total_weekly_hours += total_hours %>
             <% end %>
             <tr><td colspan=2><%= "Billing: #{tally[0]} full, #{tally[1]} half" %></td></tr>
             <% all_tally[0] += tally[0] %>
             <% all_tally[1] += tally[1] %>
             </table><br>
         <% end %>
+        <p>Total weekly hours for all tasks: <strong><%= total_weekly_hours.round(2) %></strong></p>
+        <% project_hours += total_weekly_hours %>
     <% end %>
     <h2 id='bill_sum'>Project billing status</h2>
+    <p>Effort hours so far summary: <%= project_hours.round(2) %></p>
     <p>Effort days so far summary: <%= "#{all_tally[0]} full, #{all_tally[1]} half" %> days</p>
     <p>Effort days converted to full: <%= "#{(all_tally[0] + all_tally[1]/2.0).round(1)}" %> days</p>
     <% if days_proposed.positive? %>
