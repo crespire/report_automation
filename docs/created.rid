@@ -1,9 +1,12 @@
-Fri, 18 Nov 2022 14:25:27 -0500
-Gemfile	Fri, 18 Nov 2022 13:45:32 -0500
-Gemfile.lock	Fri, 18 Nov 2022 13:45:33 -0500
-README.md	Fri, 18 Nov 2022 14:16:21 -0500
-lib/clockify.rb	Fri, 18 Nov 2022 14:18:49 -0500
-lib/days.rb	Fri, 18 Nov 2022 13:50:44 -0500
-lib/pdf.rb	Fri, 18 Nov 2022 14:23:59 -0500
-lib/xlsx.rb	Fri, 18 Nov 2022 10:57:29 -0500
-main.rb	Fri, 18 Nov 2022 13:34:06 -0500
+Tue, 22 Nov 2022 16:52:46 -0500
+Gemfile	Mon, 21 Nov 2022 16:01:39 -0500
+Gemfile.lock	Tue, 22 Nov 2022 10:04:22 -0500
+README.md	Tue, 22 Nov 2022 16:51:43 -0500
+executable.md	Mon, 21 Nov 2022 18:26:47 -0500
+gui.rb	Tue, 22 Nov 2022 16:52:38 -0500
+history.md	Fri, 18 Nov 2022 14:43:42 -0500
+lib/clockify.rb	Mon, 21 Nov 2022 16:01:39 -0500
+lib/days.rb	Mon, 21 Nov 2022 16:01:39 -0500
+lib/pdf.rb	Tue, 22 Nov 2022 16:49:50 -0500
+lib/xlsx.rb	Tue, 22 Nov 2022 16:49:50 -0500
+main.rb	Mon, 21 Nov 2022 11:46:10 -0500

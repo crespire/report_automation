@@ -15,12 +15,8 @@ A week runs from Monday @ midnight through to the following Sunday at 23:59:59. 
 
 A year runs from Jan 1 @ midnight through to either yesterday (if current year) or December 31st if the year has changed. For rationale, consult documentation.
 
-## Full and Half Day Calculations
-Currently, full and half days are calculated as such.
-For every user and day, time that:
-* totals over 8 hours is recorded as a day and a half
-* totals to between 4 and 8 hours (inclusive) is recorded as a day
-* totals to less than 4 hours is recorded as a half day
+## Billing Standard
+The current billing standard is `total hours / 7.0 = effort days`.
 
 # How to Run
 In order to run this locally, clone the repository and set up the following:

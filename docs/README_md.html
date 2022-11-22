@@ -60,7 +60,7 @@
   <ul class="link-list" role="directory">
     <li><a href="#label-Report+Automation">Report Automation</a>
     <li><a href="#label-Time+definitions">Time definitions</a>
-    <li><a href="#label-Full+and+Half+Day+Calculations">Full and Half Day Calculations</a>
+    <li><a href="#label-Billing+Standard">Billing Standard</a>
     <li><a href="#label-How+to+Run">How to Run</a>
   </ul>
 </div>
@@ -75,6 +75,8 @@
     <li><a href="./Gemfile.html">Gemfile</a>
     <li><a href="./Gemfile_lock.html">Gemfile.lock</a>
     <li><a href="./README_md.html">README</a>
+    <li><a href="./executable_md.html">executable</a>
+    <li><a href="./history_md.html">history</a>
   </ul>
 </div>
 
@@ -84,6 +86,8 @@
 <main role="main" aria-label="Page README.md">
 
 <h1 id="label-Report+Automation">Report Automation<span><a href="#label-Report+Automation">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Ruby 3.0.2</p>
 
 <p>This repository has classes and a script that make it easy to query for information about tasks, etc. The main.rb script takes input and outputs the appropriate files.</p>
 
@@ -99,9 +103,9 @@
 
 <p>A year runs from Jan 1 @ midnight through to either yesterday (if current year) or December 31st if the year has changed. For rationale, consult documentation.</p>
 
-<h2 id="label-Full+and+Half+Day+Calculations">Full and Half Day Calculations<span><a href="#label-Full+and+Half+Day+Calculations">&para;</a> <a href="#top">&uarr;</a></span></h2>
+<h2 id="label-Billing+Standard">Billing Standard<span><a href="#label-Billing+Standard">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>Currently, full and half days are calculated as such. For every user and day, time that: * totals over 8 hours is recorded as a day and a half * totals to between 4 and 8 hours (inclusive) is recorded as a day * totals to less than 4 hours is recorded as a half day</p>
+<p>The current billing standard is <code>total hours / 7.0 = effort days</code>.</p>
 
 <h1 id="label-How+to+Run">How to Run<span><a href="#label-How+to+Run">&para;</a> <a href="#top">&uarr;</a></span></h1>
 

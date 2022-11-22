@@ -81,9 +81,10 @@
 
   <ul class="link-list" role="directory">
     <li ><a href="#method-c-new">::new</a>
+    <li ><a href="#method-i-current_week">#current_week</a>
+    <li ><a href="#method-i-current_year">#current_year</a>
     <li ><a href="#method-i-custom_range">#custom_range</a>
     <li ><a href="#method-i-default_range">#default_range</a>
-    <li ><a href="#method-i-default_range_week">#default_range_week</a>
     <li ><a href="#method-i-get_report">#get_report</a>
     <li ><a href="#method-i-output">#output</a>
     <li ><a href="#method-i-set_client">#set_client</a>
@@ -107,6 +108,15 @@
   <section id="5Buntitled-5D" class="documentation-section">
 
 
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+        <dt id="DAY_STANDARD">DAY_STANDARD
+        <dd><p>Hours per stuido day</p>
+      </dl>
+    </section>
 
 
 
@@ -126,7 +136,7 @@
           <p>Initialize instance variables</p>
 
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 14</span>
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">api</span>)
   <span class="ruby-ivar">@projects</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hash</span>, <span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">key</span>] = [] }
   <span class="ruby-ivar">@last_start</span> = <span class="ruby-keyword">nil</span>
@@ -149,24 +159,82 @@
          <h3>Public Instance Methods</h3>
        </header>
 
-      <div id="method-i-custom_range" class="method-detail ">
+      <div id="method-i-current_week" class="method-detail ">
         <div class="method-heading">
-          <span class="method-name">custom_range</span><span
+          <span class="method-name">current_week</span><span
             class="method-args">()</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
 
         <div class="method-description">
-          <p>Get input to generate custom week range</p>
+          <p>Returns week number for current range</p>
+
+          <div class="method-source-code" id="current_week-source">
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">current_week</span>
+  <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">cweek</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-current_year" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">current_year</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Returns the year for the current range</p>
+
+          <div class="method-source-code" id="current_year-source">
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">current_year</span>
+  <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">cwyear</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-custom_range" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">custom_range</span><span
+            class="method-args">(date = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Get input to generate custom week range Takes optional <code>date</code> parameter, abd skips input prompts.</p>
 
           <div class="method-source-code" id="custom_range-source">
-            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 40</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">custom_range</span>
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 51</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">custom_range</span>(<span class="ruby-identifier">date</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">date</span>
+    <span class="ruby-ivar">@last_start</span>, <span class="ruby-ivar">@last_end</span> = <span class="ruby-constant">Days</span>.<span class="ruby-identifier">get_days_from_week</span>(<span class="ruby-identifier">date</span>.<span class="ruby-identifier">cwyear</span>, <span class="ruby-identifier">date</span>.<span class="ruby-identifier">month</span>, <span class="ruby-identifier">date</span>.<span class="ruby-identifier">day</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">print</span> <span class="ruby-string">&#39;What year? &#39;</span>
+  <span class="ruby-identifier">year</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">to_i</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">year</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">cwyear</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&#39;Year selected is in the future, defaulting to current year.&#39;</span>
+    <span class="ruby-identifier">year</span> = <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">cwyear</span>
+    <span class="ruby-identifier">sleep</span>(<span class="ruby-value">1</span>)
+  <span class="ruby-keyword">end</span>
+
   <span class="ruby-identifier">new_week</span> = <span class="ruby-value">0</span>
   <span class="ruby-identifier">print</span> <span class="ruby-string">&#39;What week do you want to retrieve? &#39;</span>
   <span class="ruby-identifier">new_week</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-keyword">until</span> <span class="ruby-identifier">new_week</span>.<span class="ruby-identifier">between?</span>(<span class="ruby-value">1</span>, <span class="ruby-value">53</span>)
-  <span class="ruby-identifier">print</span> <span class="ruby-string">&#39;What year? &#39;</span>
-  <span class="ruby-identifier">year</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">to_i</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">new_week</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">cweek</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&#39;Week selected is in the future, defaulting to current week.&#39;</span>
+    <span class="ruby-identifier">sleep</span>(<span class="ruby-value">1</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
 
   <span class="ruby-ivar">@last_start</span>, <span class="ruby-ivar">@last_end</span> = <span class="ruby-constant">Days</span>.<span class="ruby-identifier">get_days</span>(<span class="ruby-identifier">new_week</span>, <span class="ruby-identifier">year</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -187,31 +255,10 @@
           <p>Generate date range based on last Sunday</p>
 
           <div class="method-source-code" id="default_range-source">
-            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 27</span>
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">default_range</span>
   <span class="ruby-ivar">@last_end</span> = <span class="ruby-constant">Days</span>.<span class="ruby-identifier">prior_weekday</span>(<span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>, <span class="ruby-string">&#39;Sunday&#39;</span>)
   <span class="ruby-ivar">@last_start</span> = <span class="ruby-constant">Days</span>.<span class="ruby-identifier">prior_weekday</span>(<span class="ruby-ivar">@last_end</span>, <span class="ruby-string">&#39;Monday&#39;</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div>
-        </div>
-
-
-      </div>
-
-      <div id="method-i-default_range_week" class="method-detail ">
-        <div class="method-heading">
-          <span class="method-name">default_range_week</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-
-        <div class="method-description">
-          <p>Returns week number for default range</p>
-
-          <div class="method-source-code" id="default_range_week-source">
-            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 34</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">default_range_week</span>
-  <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">cweek</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
@@ -230,7 +277,7 @@
           <p>Query API for data</p>
 
           <div class="method-source-code" id="get_report-source">
-            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 59</span>
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 87</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_report</span>
   <span class="ruby-identifier">json</span> = <span class="ruby-ivar">@api</span>.<span class="ruby-identifier">detailed_report</span>(<span class="ruby-ivar">@last_start</span>, <span class="ruby-ivar">@last_end</span>)
 
@@ -281,7 +328,7 @@
           <p>Utilize Axlsx to generate output file.</p>
 
           <div class="method-source-code" id="output-source">
-            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 96</span>
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 124</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">output</span>(<span class="ruby-identifier">base_dir</span>)
   <span class="ruby-identifier">date</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>
   <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Generating report for week #{@last_start.cweek}.&quot;</span>
@@ -295,6 +342,7 @@
         <span class="ruby-identifier">style</span> = <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">styles</span>
         <span class="ruby-identifier">money_style</span> = <span class="ruby-identifier">style</span>.<span class="ruby-identifier">add_style</span> <span class="ruby-value">num_fmt:</span> <span class="ruby-value">4</span>
         <span class="ruby-identifier">bold_text</span> = <span class="ruby-identifier">style</span>.<span class="ruby-identifier">add_style</span> <span class="ruby-value">b:</span> <span class="ruby-keyword">true</span>
+        <span class="ruby-identifier">outline_style</span> = <span class="ruby-identifier">style</span>.<span class="ruby-identifier">add_style</span> <span class="ruby-value">border:</span> <span class="ruby-value">1</span>
 
         <span class="ruby-identifier">day_start</span> = <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-string">&#39;%B %d&#39;</span>)
         <span class="ruby-identifier">day_end</span> = <span class="ruby-ivar">@last_start</span>.<span class="ruby-identifier">month</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@last_end</span>.<span class="ruby-identifier">month</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@last_end</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-string">&#39;%d&#39;</span>) <span class="ruby-operator">:</span> <span class="ruby-ivar">@last_end</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-string">&#39;%B %d&#39;</span>)
@@ -317,15 +365,16 @@
             <span class="ruby-string">&#39;Billable Rate (CAD)&#39;</span>,
             <span class="ruby-string">&#39;Billable Amount (CAD)&#39;</span>,
             <span class="ruby-string">&#39;User&#39;</span>,
-            <span class="ruby-string">&#39;Full Day&#39;</span>,
-            <span class="ruby-string">&#39;Half Day&#39;</span>
+            <span class="ruby-string">&#39;Full Days&#39;</span>
           ],
           <span class="ruby-value">style:</span> <span class="ruby-identifier">bold_text</span>
         )
 
         <span class="ruby-identifier">row_ind</span> = <span class="ruby-value">3</span>
-        <span class="ruby-identifier">grouped_tasks</span> = <span class="ruby-identifier">tasks_array</span>.<span class="ruby-identifier">group_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">task</span><span class="ruby-operator">|</span> <span class="ruby-identifier">task</span>[<span class="ruby-value">:start_date</span>] }
-        <span class="ruby-identifier">grouped_tasks</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">day</span>, <span class="ruby-identifier">tasks</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">tasks_by_day</span> = <span class="ruby-identifier">tasks_array</span>.<span class="ruby-identifier">group_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">task</span><span class="ruby-operator">|</span> <span class="ruby-identifier">task</span>[<span class="ruby-value">:start_date</span>] }
+        <span class="ruby-identifier">tasks_by_day</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">day</span>, <span class="ruby-identifier">tasks</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">day_hours</span> = <span class="ruby-value">0</span>
+          <span class="ruby-identifier">day_start_ind</span> = <span class="ruby-identifier">row_ind</span>.<span class="ruby-identifier">clone</span>
           <span class="ruby-identifier">by_user</span> = <span class="ruby-identifier">tasks</span>.<span class="ruby-identifier">group_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">task</span><span class="ruby-operator">|</span> <span class="ruby-identifier">task</span>[<span class="ruby-value">:user</span>] }
           <span class="ruby-identifier">by_user</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user</span>, <span class="ruby-identifier">user_tasks</span><span class="ruby-operator">|</span>
             <span class="ruby-identifier">user_day_hours</span> = <span class="ruby-value">0</span>
@@ -353,8 +402,8 @@
               )
               <span class="ruby-identifier">row_ind</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
             <span class="ruby-keyword">end</span>
-
             <span class="ruby-comment"># Summary row per user, per day</span>
+            <span class="ruby-identifier">day_hours</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">user_day_hours</span>
             <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">add_row</span>(
               [
                 <span class="ruby-keyword">nil</span>,
@@ -373,21 +422,48 @@
                 <span class="ruby-keyword">nil</span>,
                 <span class="ruby-keyword">nil</span>,
                 <span class="ruby-keyword">nil</span>,
-                <span class="ruby-node">&quot;=IF(M#{row_ind}&gt;4,1,0)&quot;</span>,
-                <span class="ruby-node">&quot;=IF(OR(M#{row_ind}&gt;8,M#{row_ind}&lt;=4),1,0)&quot;</span>
+                <span class="ruby-node">&quot;=M#{row_ind}/#{DAY_STANDARD}&quot;</span>
               ],
               <span class="ruby-value">style:</span> <span class="ruby-identifier">bold_text</span>
             )
             <span class="ruby-identifier">row_ind</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
           <span class="ruby-keyword">end</span>
 
-          <span class="ruby-comment"># Spacer row between days</span>
+          <span class="ruby-comment"># Spacer row</span>
+          <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">add_row</span>
+          <span class="ruby-identifier">row_ind</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+
+          <span class="ruby-comment"># Sum total row</span>
+          <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">add_row</span>(
+            [
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-node">&quot;Total Hours #{day}&quot;</span>,
+              <span class="ruby-identifier">day_hours</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-keyword">nil</span>,
+              <span class="ruby-string">&#39;Total Days&#39;</span>,
+              <span class="ruby-node">&quot;=SUM(Q#{day_start_ind}:Q#{row_ind - 1})&quot;</span>
+            ],
+            <span class="ruby-value">style:</span> <span class="ruby-identifier">bold_text</span>
+          )
+          <span class="ruby-identifier">row_ind</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+
+          <span class="ruby-comment"># Spacer</span>
           <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">add_row</span>
           <span class="ruby-identifier">row_ind</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
         <span class="ruby-keyword">end</span>
 
-        <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">add_row</span> [<span class="ruby-string">&#39;TOTAL&#39;</span>, <span class="ruby-node">&quot;=SUM(Q3:Q#{row_ind - 1})&quot;</span>, <span class="ruby-node">&quot;=SUM(R3:R#{row_ind - 1})&quot;</span>], <span class="ruby-value">offset:</span> <span class="ruby-value">15</span>, <span class="ruby-value">style:</span> <span class="ruby-identifier">bold_text</span>
-        <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">column_widths</span> <span class="ruby-value">15</span>, <span class="ruby-value">10</span>, <span class="ruby-value">35</span>, <span class="ruby-value">10</span>, <span class="ruby-value">15</span>, <span class="ruby-value">15</span>, <span class="ruby-value">5</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">7</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">5</span>, <span class="ruby-value">5</span>
+        <span class="ruby-identifier">sheet</span>.<span class="ruby-identifier">column_widths</span> <span class="ruby-value">15</span>, <span class="ruby-value">10</span>, <span class="ruby-value">35</span>, <span class="ruby-value">10</span>, <span class="ruby-value">15</span>, <span class="ruby-value">15</span>, <span class="ruby-value">5</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">25</span>, <span class="ruby-value">7</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">10</span>, <span class="ruby-value">5</span>, <span class="ruby-value">5</span>
       <span class="ruby-keyword">end</span>
 
       <span class="ruby-identifier">file</span>.<span class="ruby-identifier">serialize</span>(<span class="ruby-node">&quot;#{output_dir}/#{@client}_ending_#{@last_end.strftime(&#39;%F&#39;)}.xlsx&quot;</span>)
@@ -405,17 +481,17 @@
       <div id="method-i-set_client" class="method-detail ">
         <div class="method-heading">
           <span class="method-name">set_client</span><span
-            class="method-args">()</span>
+            class="method-args">(client = nil)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
 
         <div class="method-description">
-          <p>Set client via API</p>
+          <p>Set client via API Takes optional <code>client</code> input</p>
 
           <div class="method-source-code" id="set_client-source">
-            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 52</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_client</span>
-  <span class="ruby-ivar">@client</span> = <span class="ruby-ivar">@api</span>.<span class="ruby-identifier">set_client</span>
+            <pre><span class="ruby-comment"># File lib/xlsx.rb, line 80</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_client</span>(<span class="ruby-identifier">client</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-ivar">@client</span> = <span class="ruby-ivar">@api</span>.<span class="ruby-identifier">set_client</span>(<span class="ruby-identifier">client</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>

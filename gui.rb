@@ -26,6 +26,8 @@ class Gui
 
   attr_accessor :report_type, :report_range, :report_client, :output, :project_budgets
 
+  ##
+  # Init GUI
   def initialize
     @output = CONFIG['output']
     @report_client = 'Marcon'
@@ -35,6 +37,8 @@ class Gui
     @project_budgets = {}
   end
 
+  ##
+  # Launches GUI
   def launch
     window {
       title 'DSReportBeaver'
