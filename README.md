@@ -1,5 +1,7 @@
 # Report Automation
 
+Ruby 3.0.2
+
 This repository has classes and a script that make it easy to query for information about tasks, etc. The main.rb script takes input and outputs the appropriate files.
 
 The script first determines what report type the user would like to generate, then asks which client is being reported on.
