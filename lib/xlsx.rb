@@ -130,6 +130,7 @@ class OutputXlsx
           style = sheet.styles
           money_style = style.add_style num_fmt: 4
           bold_text = style.add_style b: true
+          outline_style = style.add_style border: 1
 
           day_start = @last_start.strftime('%B %d')
           day_end = @last_start.month == @last_end.month ? @last_end.strftime('%d') : @last_end.strftime('%B %d')
@@ -159,8 +160,10 @@ class OutputXlsx
           )
 
           row_ind = 3
-          grouped_tasks = tasks_array.group_by { |task| task[:start_date] }
-          grouped_tasks.each do |day, tasks|
+          tasks_by_day = tasks_array.group_by { |task| task[:start_date] }
+          tasks_by_day.each do |day, tasks|
+            day_hours = 0
+            day_start_ind = row_ind.clone
             by_user = tasks.group_by { |task| task[:user] }
             by_user.each do |user, user_tasks|
               user_day_hours = 0
@@ -188,8 +191,8 @@ class OutputXlsx
                 )
                 row_ind += 1
               end
-
               # Summary row per user, per day
+              day_hours += user_day_hours
               sheet.add_row(
                 [
                   nil,
@@ -216,13 +219,42 @@ class OutputXlsx
               row_ind += 1
             end
 
-            # Spacer row between days
+            # Spacer row
+            sheet.add_row
+            row_ind += 1
+
+            # Sum total row
+            sheet.add_row(
+              [
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                "Total Hours #{day}",
+                day_hours,
+                nil,
+                nil,
+                'Total Days',
+                "=SUM(Q#{day_start_ind}:Q#{row_ind - 1})",
+                "=SUM(R#{day_start_ind}:R#{row_ind - 1})"
+              ],
+              style: bold_text
+            )
+            row_ind += 1
+
+            # Spacer
             sheet.add_row
             row_ind += 1
           end
 
-          sheet.add_row ['TOTAL', "=SUM(Q3:Q#{row_ind - 1})", "=SUM(R3:R#{row_ind - 1})"], offset: 15, style: bold_text
-          sheet.column_widths 15, 10, 35, 10, 15, 15, 5, 10, 10, 10, 10, 10, 7, 10, 10, 10, 5, 5
+          sheet.column_widths 15, 10, 35, 10, 15, 15, 5, 10, 10, 10, 10, 25, 7, 10, 10, 10, 5, 5
         end
 
         file.serialize("#{output_dir}/#{@client}_ending_#{@last_end.strftime('%F')}.xlsx")
