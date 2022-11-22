@@ -75,6 +75,7 @@
     <li ><a href="#method-c-new">::new</a>
     <li ><a href="#method-i-client_id">#client_id</a>
     <li ><a href="#method-i-client_list">#client_list</a>
+    <li ><a href="#method-i-client_names">#client_names</a>
     <li ><a href="#method-i-detailed_report">#detailed_report</a>
     <li ><a href="#method-i-set_client">#set_client</a>
   </ul>
@@ -210,6 +211,28 @@
 
       </div>
 
+      <div id="method-i-client_names" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">client_names</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="client_names-source">
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 109</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">client_names</span>
+  <span class="ruby-identifier">client_list</span>
+  <span class="ruby-ivar">@client_names</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@clients</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">client</span><span class="ruby-operator">|</span> <span class="ruby-identifier">client</span>[<span class="ruby-string">&#39;name&#39;</span>] }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
       <div id="method-i-detailed_report" class="method-detail ">
         <div class="method-heading">
           <span class="method-name">detailed_report</span><span
@@ -225,7 +248,7 @@
 <p><code>end_date</code> is a string in the number format “%Y-%m-%d”</p>
 
           <div class="method-source-code" id="detailed_report-source">
-            <pre><span class="ruby-comment"># File lib/clockify.rb, line 80</span>
+            <pre><span class="ruby-comment"># File lib/clockify.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">detailed_report</span>(<span class="ruby-identifier">start_date</span>, <span class="ruby-identifier">end_date</span>)
   <span class="ruby-ivar">@active_client</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">set_client</span>
   <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Requesting data for #{@active_client} from #{start_date} to #{end_date}&quot;</span>
@@ -261,7 +284,7 @@
       <div id="method-i-set_client" class="method-detail ">
         <div class="method-heading">
           <span class="method-name">set_client</span><span
-            class="method-args">()</span>
+            class="method-args">(input=nil)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
 
@@ -270,7 +293,9 @@
 
           <div class="method-source-code" id="set_client-source">
             <pre><span class="ruby-comment"># File lib/clockify.rb, line 58</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_client</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_client</span>(<span class="ruby-identifier">input</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@active_client</span> = <span class="ruby-identifier">input</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>
+
   <span class="ruby-ivar">@clients</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">client_list</span>
   <span class="ruby-identifier">selected_client</span> = <span class="ruby-keyword">nil</span>
   <span class="ruby-identifier">list_clients</span>
