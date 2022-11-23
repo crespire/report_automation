@@ -125,7 +125,6 @@ class OutputXlsx
     date = Date.today
     puts "Generating report for week #{@last_start.cweek}."
     output_dir = "#{base_dir}/#{@last_start.cwyear}/wk#{@last_end.cweek}/xlsx-gen-#{date.strftime("%Y%b%d")}"
-    puts "Output dir: #{output_dir}"
     FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
 
     Axlsx::Package.new do |file|
@@ -258,7 +257,9 @@ class OutputXlsx
           sheet.column_widths 15, 10, 35, 10, 15, 15, 5, 10, 10, 10, 10, 25, 7, 10, 10, 10, 5, 5
         end
 
-        file.serialize("#{output_dir}/#{@client}_ending_#{@last_end.strftime('%F')}.xlsx")
+        filename = "#{output_dir}/#{@client}_ending_#{@last_end.strftime('%F')}.xlsx"
+        file.serialize(filename)
+        puts("Report written to: #{filename}")
       end
     end
 

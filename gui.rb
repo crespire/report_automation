@@ -1,5 +1,4 @@
 require 'glimmer-dsl-libui'
-require 'glimmer/rake_task'
 require 'date'
 require 'time'
 require 'fileutils'
@@ -47,7 +46,7 @@ class Gui
       vertical_box {
         label('Output directory') { stretchy false }
         entry {
-          text <=> [self, :output, after_write: ->(text) { puts text; $stdout.flush }]
+          text <=> [self, :output, { after_write: ->(text) { puts text; $stdout.flush } }]
         }
 
         label('Report Type') { stretchy false }
@@ -57,7 +56,6 @@ class Gui
 
           on_selected do |c|
             @report_type = c.selected
-            puts "New report type selection: #{@report_type}"
             $stdout.flush # for Windows
           end
         }
@@ -89,7 +87,6 @@ class Gui
         button('Run report') {
           on_clicked do
             if @report_type.zero?
-              puts 'Generating annual PDF report...'
               file = OutputPdf.new(CLOCKIFY_API)
               file.set_client(@report_client)
               file.change_year if @report_range.cwyear != Date.today.cwyear
@@ -112,13 +109,11 @@ class Gui
 
                 on_closing do
                   data.each { |item| @project_budgets[item[0]] = item[1].to_f }
-                  puts @project_budgets
                   file.budgets(@project_budgets)
                   file.output(@output)
                 end
               }.show
             else
-              puts 'Generating weekly report...'
               file = OutputXlsx.new(CLOCKIFY_API)
               file.set_client(@report_client)
               file.custom_range(@report_range)

@@ -119,7 +119,6 @@ class OutputPdf
       erb = ERB.new(report_template, trim_mode: '<>')
 
       output_dir = "#{base_dir}/#{@end_date.cwyear}/wk#{@end_date.cweek}/pdf-gen-#{Date.today.strftime("%Y%b%d")}"
-      puts "Output dir: #{output_dir}"
       FileUtils.mkdir_p output_dir unless Dir.exist?(output_dir)
 
       # Only prompt if CLI
@@ -144,6 +143,8 @@ class OutputPdf
 
           days_proposed = days_proposed.gsub(/\s+/, '').split('+').sum(&:to_f)
         end
+
+        puts 'No project budgets found.' if @project_budgets.length > 0 && @project_budgets.values.all?(&:zero?)
 
         report = erb.result(binding)
         filename = "#{output_dir}/#{@client}_#{proj} Report.pdf"
