@@ -156,7 +156,8 @@ class OutputXlsx
               'Billable Rate (CAD)',
               'Billable Amount (CAD)',
               'User',
-              'Full Days'
+              'Days',
+              'Total Days'
             ],
             style: bold_text
           )
@@ -213,7 +214,7 @@ class OutputXlsx
                   nil,
                   nil,
                   nil,
-                  "=M#{row_ind}/#{DAY_STANDARD}"
+                  "=ROUND(M#{row_ind}/#{DAY_STANDARD}, 2)"
                 ],
                 style: bold_text
               )
@@ -242,8 +243,9 @@ class OutputXlsx
                 day_hours,
                 nil,
                 nil,
+                nil,
                 'Total Days',
-                "=SUM(Q#{day_start_ind}:Q#{row_ind - 1})"
+                "=ROUND(SUM(Q#{day_start_ind}:Q#{row_ind - 1}), 2)"
               ],
               style: bold_text
             )
@@ -256,11 +258,11 @@ class OutputXlsx
 
           sheet.column_widths 15, 10, 35, 10, 15, 15, 5, 10, 10, 10, 10, 25, 7, 10, 10, 10, 5, 5
         end
-
-        filename = "#{output_dir}/#{@client}_ending_#{@last_end.strftime('%F')}.xlsx"
-        file.serialize(filename)
-        puts("Report written to: #{filename}")
       end
+
+      filename = "#{output_dir}/#{@client}_ending_#{@last_end.strftime('%F')}.xlsx"
+      file.serialize(filename)
+      puts("Report written to: #{filename}")
     end
 
     true
