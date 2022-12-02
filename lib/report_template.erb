@@ -64,7 +64,7 @@
     <p>Effort days converted to full: <%= "#{(project_hours / DAY_STANDARD).round(2)}" %> days</p>
     <% if days_proposed.positive? %>
         <p>Project estimated effort: <%= days_proposed %> days</p>
-        <p>Balance of days summary: <%= "#{(project_hours / DAY_STANDARD).round(2) - days_proposed.to_f.round(2)}" %> days<sup>*</sup></p>
+        <p>Balance of days summary: <%= "#{((project_hours / DAY_STANDARD) - days_proposed.to_f).round(2)}" %> days<sup>*</sup></p>
         <span style="font-size: 0.75rem"><sup>*</sup> Negative values indicate we have runway, positive values mean we are overbudget compared to the proposal.</span>
     <% end %>
 </body>
